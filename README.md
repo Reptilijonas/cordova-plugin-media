@@ -454,7 +454,7 @@ Stops playing an audio file.
 
 Start or stop repeating an audio file.
 
-    media.setVolume(isOnRepeat);
+    media.repeat(isOnRepeat);
 
 ### Parameters
 
