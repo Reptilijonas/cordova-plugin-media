@@ -17,23 +17,15 @@
     under the License.
 -->
 
-# cordova-plugin-media
+# org.apache.cordova.media
 
 Este plugin proporciona la capacidad de grabar y reproducir archivos de audio en un dispositivo.
 
 **Nota**: la implementación actual no se adhiere a una especificación del W3C para la captura de los medios de comunicación y se proporciona únicamente para su comodidad. Una futura implementación se adherirá a la más reciente especificación W3C y puede desaprueban las API actuales.
 
-Este plugin define un global `Media` Constructor.
-
-Aunque en el ámbito global, no estará disponible hasta después de la `deviceready` evento.
-
-    document.addEventListener ("deviceready", onDeviceReady, false);
-    function onDeviceReady() {console.log(Media)};
-    
-
 ## Instalación
 
-    Cordova plugin agregar cordova-plugin-media
+    cordova plugin add org.apache.cordova.media
     
 
 ## Plataformas soportadas
@@ -43,7 +35,7 @@ Aunque en el ámbito global, no estará disponible hasta después de la `devicer
 *   iOS
 *   Windows Phone 7 y 8
 *   Tizen
-*   Windows
+*   Windows 8
 
 ## Windows Phone rarezas
 
@@ -55,7 +47,7 @@ Aunque en el ámbito global, no estará disponible hasta después de la `devicer
 
 ## Los medios de comunicación
 
-    los medios de comunicación var = new Media (src, mediaSuccess, [mediaError], [mediaStatus]);
+    var media = new Media(src, mediaSuccess, [mediaError], [mediaStatus]);
     
 
 ### Parámetros
@@ -70,7 +62,7 @@ Aunque en el ámbito global, no estará disponible hasta después de la `devicer
 
 ### Constantes
 
-Las siguientes constantes son reportadas como el único parámetro a la `mediaStatus` callback:
+Las siguientes constantes son reportadas como el único parámetro para la devolución de llamada `mediaStatus`:
 
 *   `Media.MEDIA_NONE` = 0;
 *   `Media.MEDIA_STARTING` = 1;
@@ -112,7 +104,7 @@ Las siguientes constantes son reportadas como el único parámetro a la `mediaSt
 
 Devuelve la posición actual dentro de un archivo de audio. También actualiza el `Media` del objeto `position` parámetro.
 
-    media.getCurrentPosition (mediaSuccess, [mediaError]);
+    media.getCurrentPosition(mediaSuccess, [mediaError]);
     
 
 ### Parámetros
@@ -123,10 +115,23 @@ Devuelve la posición actual dentro de un archivo de audio. También actualiza e
 
 ### Ejemplo rápido
 
-    Reproductor de audio / / var my_media = new Media (src, onSuccess, onError);
+    // Audio player
+    //
+    var my_media = new Media(src, onSuccess, onError);
     
-    Actualización medios posición cada segundo var mediaTimer = setInterval(function () {/ / obtener medios posición my_media.getCurrentPosition (/ / función de devolución de llamada de éxito (posición) {si (posición > -1) {console.log((position) + "sec");
-                }}, / / función de callback de error (e) {console.log ("Error al obtener pos =" + e);
+    // Update media position every second
+    var mediaTimer = setInterval(function () {
+        // get media position
+        my_media.getCurrentPosition(
+            // success callback
+            function (position) {
+                if (position > -1) {
+                    console.log((position) + " sec");
+                }
+            },
+            // error callback
+            function (e) {
+                console.log("Error getting pos=" + e);
             }
         );
     }, 1000);
@@ -141,31 +146,51 @@ Devuelve la duración de un archivo de audio en segundos. Si se desconoce la dur
 
 ### Ejemplo rápido
 
-    Reproductor de audio / / var my_media = new Media (src, onSuccess, onError);
+    // Audio player
+    //
+    var my_media = new Media(src, onSuccess, onError);
     
-    Obtener contador duración var = 0;
-    var timerDur = setInterval(function() {contador = contador + 100;
-        Si (contador > 2000) {clearInterval(timerDur);
-        } var dur = my_media.getDuration();
-        Si (dur > 0) {clearInterval(timerDur);
-            document.getElementById('audio_duration').innerHTML = (dur) + "sec";
-        }}, 100);
+    // Get duration
+    var counter = 0;
+    var timerDur = setInterval(function() {
+        counter = counter + 100;
+        if (counter > 2000) {
+            clearInterval(timerDur);
+        }
+        var dur = my_media.getDuration();
+        if (dur > 0) {
+            clearInterval(timerDur);
+            document.getElementById('audio_duration').innerHTML = (dur) + " sec";
+        }
+    }, 100);
     
 
 ## media.pause
 
-Detiene temporalmente la reproducción de un archivo de audio.
+Pausas jugando un archivo de audio.
 
-    media.Pause();
+    media.pause();
     
 
 ### Ejemplo rápido
 
-    Reproducir audio / / function playAudio(url) {/ / reproducción del archivo de audio en my_media var url = new Media (url, / / función de devolución de llamada de éxito () {console.log ("(playAudio): Audio éxito");}, / / función de callback de error (err) {console.log ("(playAudio): Audio Error:" + err);});
+    // Play audio
+    //
+    function playAudio(url) {
+        // Play the audio file at url
+        var my_media = new Media(url,
+            // success callback
+            function () { console.log("playAudio():Audio Success"); },
+            // error callback
+            function (err) { console.log("playAudio():Audio Error: " + err); }
+        );
     
-        Reproducir audio my_media.play();
+        // Play audio
+        my_media.play();
     
-        Hacer una pausa después de 10 segundos setTimeout (function () {media.pause();
+        // Pause after 10 seconds
+        setTimeout(function () {
+            media.pause();
         }, 10000);
     }
     
@@ -174,16 +199,27 @@ Detiene temporalmente la reproducción de un archivo de audio.
 
 Inicia o reanuda la reproducción de un archivo de audio.
 
-    media.Play();
+    media.play();
     
 
 ### Ejemplo rápido
 
-    Reproducir audio / / function playAudio(url) {/ / reproducción del archivo de audio en el url var my_media = new Media (url, / / función de devolución de llamada de éxito () {console.log ("(playAudio): Audio éxito");
-            }, / / función de callback de error (err) {console.log ("(playAudio): Audio Error:" + err);
+    // Play audio
+    //
+    function playAudio(url) {
+        // Play the audio file at url
+        var my_media = new Media(url,
+            // success callback
+            function () {
+                console.log("playAudio():Audio Success");
+            },
+            // error callback
+            function (err) {
+                console.log("playAudio():Audio Error: " + err);
             }
         );
-        Reproducir audio my_media.play();
+        // Play audio
+        my_media.play();
     }
     
 
@@ -209,18 +245,20 @@ Inicia o reanuda la reproducción de un archivo de audio.
 
 ## media.release
 
-Libera los recursos de audio del sistema operativo subyacente. Esto es particularmente importante para Android, ya que hay una cantidad finita de instancias de OpenCore para la reproducción multimedia. Las aplicaciones deben llamar el `release` función para cualquier `Media` recurso que ya no es necesario.
+Libera los recursos de audio del sistema operativo subyacente. Esto es particularmente importante para Android, ya que hay una cantidad finita de instancias de OpenCore para la reproducción multimedia. Las aplicaciones deben llamar a la función de `release` para cualquier recurso `Media` que ya no es necesario.
 
-    media.Release();
+    media.release();
     
 
 ### Ejemplo rápido
 
-    Reproductor de audio / / var my_media = new Media (src, onSuccess, onError);
+    // Audio player
+    //
+    var my_media = new Media(src, onSuccess, onError);
     
-    my_media.Play();
-    my_media.STOP();
-    my_media.Release();
+    my_media.play();
+    my_media.stop();
+    my_media.release();
     
 
 ## media.seekTo
@@ -236,9 +274,14 @@ Establece la posición actual dentro de un archivo de audio.
 
 ### Ejemplo rápido
 
-    Reproductor de audio / / var my_media = new Media (src, onSuccess, onError);
-        my_media.Play();
-    Buscan a 10 segundos después de 5 segundos setTimeout(function() {my_media.seekTo(10000);}, 5000);
+    // Audio player
+    //
+    var my_media = new Media(src, onSuccess, onError);
+        my_media.play();
+    // SeekTo to 10 seconds after 5 seconds
+    setTimeout(function() {
+        my_media.seekTo(10000);
+    }, 5000);
     
 
 ### BlackBerry 10 rarezas
@@ -247,7 +290,7 @@ Establece la posición actual dentro de un archivo de audio.
 
 ## media.setVolume
 
-Ajuste el volumen para un archivo de audio.
+Ajustar el volumen para un archivo de audio.
 
     media.setVolume(volume);
     
@@ -263,16 +306,31 @@ Ajuste el volumen para un archivo de audio.
 
 ### Ejemplo rápido
 
-    Reproducir audio / / function playAudio(url) {/ / reproducción del archivo de audio en el url var my_media = new Media (url, / / éxito callback function() {console.log ("(playAudio): Audio éxito");
-            }, / / error callback function(err) {console.log ("(playAudio): Audio Error:" + err);
+    // Play audio
+    //
+    function playAudio(url) {
+        // Play the audio file at url
+        var my_media = new Media(url,
+            // success callback
+            function() {
+                console.log("playAudio():Audio Success");
+            },
+            // error callback
+            function(err) {
+                console.log("playAudio():Audio Error: "+err);
         });
     
-        Reproducir audio my_media.play();
+        // Play audio
+        my_media.play();
     
-        Silenciar el volumen después de 2 segundos setTimeout(function() {my_media.setVolume('0.0');
+        // Mute volume after 2 seconds
+        setTimeout(function() {
+            my_media.setVolume('0.0');
         }, 2000);
     
-        Ajustar volumen 1.0 después de 5 segundos setTimeout(function() {my_media.setVolume('1.0');
+        // Set volume to 1.0 after 5 seconds
+        setTimeout(function() {
+            my_media.setVolume('1.0');
         }, 5000);
     }
     
@@ -289,23 +347,33 @@ Empieza a grabar un archivo de audio.
 *   Android
 *   iOS
 *   Windows Phone 7 y 8
-*   Windows
+*   Windows 8
 
 ### Ejemplo rápido
 
-    Grabar audio / / function recordAudio() {var src = "myrecording.mp3";
-        var mediaRec = new Media (src, / / éxito callback function() {console.log ("(recordAudio): Audio éxito");
-            }, / / error callback function(err) {console.log ("(recordAudio): Audio Error:" + err.code);
+    // Record audio
+    //
+    function recordAudio() {
+        var src = "myrecording.mp3";
+        var mediaRec = new Media(src,
+            // success callback
+            function() {
+                console.log("recordAudio():Audio Success");
+            },
+    
+            // error callback
+            function(err) {
+                console.log("recordAudio():Audio Error: "+ err.code);
             });
     
-        Grabar audio mediaRec.startRecord();
+        // Record audio
+        mediaRec.startRecord();
     }
     
 
 ### Rarezas Android
 
 *   Dispositivos Android grabación audio en formato Adaptive Multi-rate. El archivo especificado debe terminar con una extensión de *.amr*.
-*   Los controles de volumen del hardware están conectados hasta el volumen de los medios de comunicación, mientras que los objetos a los medios de comunicación están vivos. Una vez creado el último objeto multimedia ha `release()` llamado en él, los controles de volumen volverá a su comportamiento por defecto. Los controles también se restablecen en la navegación de la página, como esto libera todos los objetos de los medios de comunicación.
 
 ### iOS rarezas
 
@@ -318,7 +386,7 @@ Empieza a grabar un archivo de audio.
         var myMedia = new Media("documents://beer.mp3")
         
 
-### Windows rarezas
+### Rarezas de Windows 8
 
 *   Si no se proporciona una ruta completa, la grabación se coloca en el directorio AppData/temp. Esto puede accederse a través de la `Archivo` Usando API `LocalFileSystem.TEMPORARY` o ' ms-appdata: temporal / / / /<filename>' URI.
 
@@ -330,21 +398,34 @@ Empieza a grabar un archivo de audio.
 
 ## media.stop
 
-Deja de reproducir un archivo de audio.
+Deja de jugar a un archivo de audio.
 
-    media.STOP();
+    media.stop();
     
 
 ### Ejemplo rápido
 
-    Reproducir audio / / function playAudio(url) {/ / reproducción del archivo de audio en el url var my_media = new Media (url, / / éxito callback function() {console.log ("(playAudio): Audio éxito");
-            }, / / error callback function(err) {console.log ("(playAudio): Audio Error:" + err);
+    // Play audio
+    //
+    function playAudio(url) {
+        // Play the audio file at url
+        var my_media = new Media(url,
+            // success callback
+            function() {
+                console.log("playAudio():Audio Success");
+            },
+            // error callback
+            function(err) {
+                console.log("playAudio():Audio Error: "+err);
             }
         );
     
-        Reproducir audio my_media.play();
+        // Play audio
+        my_media.play();
     
-        Hacer una pausa después de 10 segundos setTimeout(function() {my_media.stop();
+        // Pause after 10 seconds
+        setTimeout(function() {
+            my_media.stop();
         }, 10000);
     }
     
@@ -361,19 +442,32 @@ Detiene la grabación de un archivo de audio.
 *   Android
 *   iOS
 *   Windows Phone 7 y 8
-*   Windows
+*   Windows 8
 
 ### Ejemplo rápido
 
-    Grabar audio / / function recordAudio() {var src = "myrecording.mp3";
-        var mediaRec = new Media (src, / / éxito callback function() {console.log ("(recordAudio): Audio éxito");
-            }, / / error callback function(err) {console.log ("(recordAudio): Audio Error:" + err.code);
+    // Record audio
+    //
+    function recordAudio() {
+        var src = "myrecording.mp3";
+        var mediaRec = new Media(src,
+            // success callback
+            function() {
+                console.log("recordAudio():Audio Success");
+            },
+    
+            // error callback
+            function(err) {
+                console.log("recordAudio():Audio Error: "+ err.code);
             }
         );
     
-        Grabar audio mediaRec.startRecord();
+        // Record audio
+        mediaRec.startRecord();
     
-        Detener la grabación después de 10 segundos setTimeout(function() {mediaRec.stopRecord();
+        // Stop recording after 10 seconds
+        setTimeout(function() {
+            mediaRec.stopRecord();
         }, 10000);
     }
     

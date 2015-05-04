@@ -17,25 +17,15 @@
     under the License.
 -->
 
-# cordova-plugin-media
+# org.apache.cordova.media
 
 Dieses Plugin bietet die Möglichkeit zum Aufzeichnen und Wiedergeben von audio-Dateien auf einem Gerät.
 
 **Hinweis**: die aktuelle Implementierung eine W3C-Spezifikation für Medien-Capture nicht einhalten, und wird nur zu Informationszwecken zur Verfügung gestellt. Zukünftiger Implementierungen wird an der aktuellen W3C-Spezifikation und kann die aktuellen APIs entweiht.
 
-Dieses Plugin wird einen globalen `Media`-Konstruktor definiert.
-
-Obwohl im globalen Gültigkeitsbereich, steht es nicht bis nach dem `deviceready`-Ereignis.
-
-    document.addEventListener("deviceready", onDeviceReady, false);
-    function onDeviceReady() {
-        console.log(Media);
-    }
-    
-
 ## Installation
 
-    cordova plugin add cordova-plugin-media
+    cordova plugin add org.apache.cordova.media
     
 
 ## Unterstützte Plattformen
@@ -45,7 +35,7 @@ Obwohl im globalen Gültigkeitsbereich, steht es nicht bis nach dem `deviceready
 *   iOS
 *   Windows Phone 7 und 8
 *   Tizen
-*   Windows
+*   Windows 8
 
 ## Windows Phone Macken
 
@@ -72,7 +62,7 @@ Obwohl im globalen Gültigkeitsbereich, steht es nicht bis nach dem `deviceready
 
 ### Konstanten
 
-Die folgenden Konstanten werden als einzigem Parameter an den `mediaStatus`-Rückruf gemeldet:
+Die folgenden Konstanten werden gemeldet, als einzigem Parameter an die `mediaStatus` Rückruf:
 
 *   `Media.MEDIA_NONE`= 0;
 *   `Media.MEDIA_STARTING`= 1;
@@ -112,7 +102,7 @@ Die folgenden Konstanten werden als einzigem Parameter an den `mediaStatus`-Rüc
 
 ## media.getCurrentPosition
 
-Gibt die aktuelle Position in einer Audiodatei. Außerdem aktualisiert `das Medienobjekt` `position`-Parameter.
+Gibt die aktuelle Position in einer Audiodatei. Aktualisiert auch die `Media` des Objekts `position` Parameter.
 
     media.getCurrentPosition(mediaSuccess, [mediaError]);
     
@@ -255,7 +245,7 @@ Startet oder setzt fort, Abspielen einer Audiodatei.
 
 ## media.release
 
-Das zugrunde liegende Betriebssystem audio Ressourcen frei. Dies ist besonders wichtig für Android, da gibt es eine begrenzte Anzahl von OpenCore-Instanzen für die Medienwiedergabe. Anwendungen sollten die `release`-Funktion für alle `Media`-Ressourcen aufrufen, die nicht mehr benötigt wird.
+Das zugrunde liegende Betriebssystem audio Ressourcen frei. Dies ist besonders wichtig für Android, da gibt es eine begrenzte Anzahl von OpenCore-Instanzen für die Medienwiedergabe. Anwendungen rufen die `release` -Funktion für alle `Media` Ressource, die nicht mehr benötigt wird.
 
     media.release();
     
@@ -280,7 +270,7 @@ Legt die aktuelle Position in einer Audiodatei.
 
 ### Parameter
 
-*   **miliseconds**: die Position die Wiedergabeposition innerhalb des Audiotracks in Millisekunden festgelegt.
+*   **Millisekunden**: die Position die Wiedergabeposition innerhalb des Audiotracks in Millisekunden festgelegt.
 
 ### Kurzes Beispiel
 
@@ -307,7 +297,7 @@ Stellen Sie die Lautstärke für eine audio-Datei.
 
 ### Parameter
 
-*   **volume**: die Lautstärke für Wiedergabe fest. Der Wert muss im Bereich zwischen 0,0 und 1,0 liegen.
+*   **Lautstärke**: die Lautstärke für Wiedergabe fest. Der Wert muss im Bereich zwischen 0,0 und 1,0 liegen.
 
 ### Unterstützte Plattformen
 
@@ -357,7 +347,7 @@ Beginnt mit der Aufnahme einer audio-Datei.
 *   Android
 *   iOS
 *   Windows Phone 7 und 8
-*   Windows
+*   Windows 8
 
 ### Kurzes Beispiel
 
@@ -384,7 +374,6 @@ Beginnt mit der Aufnahme einer audio-Datei.
 ### Android Eigenarten
 
 *   Android-Geräte aufnehmen Audio im Adaptive Sprachcodecs Format. Die angegebene Datei sollte mit einer Endung *.amr* enden.
-*   Die Hardware-Lautstärkeregler sind bis zu den Mediendatenträger angeschlossen, während alle Medienobjekte lebendig sind. Das letzte erstelltes Medium Objekt `release()` aufgerufen hat, werden einmal die Lautstärkeregler auf ihr Standardverhalten zurückgesetzt. Die Steuerelemente werden auch auf Seitennavigation, zurückgesetzt, wenn dies alle Medienobjekte freigibt.
 
 ### iOS Macken
 
@@ -397,7 +386,7 @@ Beginnt mit der Aufnahme einer audio-Datei.
         var myMedia = new Media("documents://beer.mp3")
         
 
-### Windows-Eigenheiten
+### Windows 8 Macken
 
 *   Wenn Sie ein vollständiger Pfad nicht angegeben ist, wird die Aufnahme im AppData/Temp-Verzeichnis platziert. Erreichbar über die `Datei` API verwenden `LocalFileSystem.TEMPORARY` oder "ms-Appdata: / / / Temp /<filename>' URI.
 
@@ -411,7 +400,7 @@ Beginnt mit der Aufnahme einer audio-Datei.
 
 Beendet die Wiedergabe einer Audiodatei.
 
-    media.stop();
+    Media.Stop();
     
 
 ### Kurzes Beispiel
@@ -453,7 +442,7 @@ Stoppt die Aufnahme einer audio-Datei.
 *   Android
 *   iOS
 *   Windows Phone 7 und 8
-*   Windows
+*   Windows 8
 
 ### Kurzes Beispiel
 
@@ -489,13 +478,13 @@ Stoppt die Aufnahme einer audio-Datei.
 
 ## Medienfehler
 
-Ein `MediaError`-Objekt wird an die `mediaError`-Callback-Funktion zurückgegeben, wenn ein Fehler auftritt.
+A `MediaError` Objekt wird zurückgegeben, um die `mediaError` Callback-Funktion, wenn ein Fehler auftritt.
 
 ### Eigenschaften
 
 *   **Code**: einer der vordefinierten Fehlercodes aufgeführt.
 
-*   **message**: eine Fehlermeldung beschreibt die Details des Fehlers.
+*   **Nachricht**: eine Fehlermeldung beschreibt die Details des Fehlers.
 
 ### Konstanten
 

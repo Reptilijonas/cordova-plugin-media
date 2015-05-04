@@ -17,25 +17,15 @@
     under the License.
 -->
 
-# cordova-plugin-media
+# org.apache.cordova.media
 
 Plugin daje możliwość nagrywania i odtwarzania plików audio na urządzeniu.
 
 **Uwaga**: Obecna implementacja nie stosować się do specyfikacji W3C do przechwytywania mediów i jest dostarczane jedynie dla wygody. Przyszłej realizacji będą przylegać do najnowszych specyfikacji W3C i może potępiać bieżące interfejsów API.
 
-Ten plugin definiuje globalny Konstruktor `Media`.
-
-Chociaż w globalnym zasięgu, to nie dostępne dopiero po `deviceready` imprezie.
-
-    document.addEventListener("deviceready", onDeviceReady, false);
-    function onDeviceReady() {
-        console.log(Media);
-    }
-    
-
 ## Instalacja
 
-    cordova plugin add cordova-plugin-media
+    cordova plugin add org.apache.cordova.media
     
 
 ## Obsługiwane platformy
@@ -45,7 +35,7 @@ Chociaż w globalnym zasięgu, to nie dostępne dopiero po `deviceready` imprezi
 *   iOS
 *   Windows Phone 7 i 8
 *   Tizen
-*   Windows
+*   Windows 8
 
 ## Windows Phone dziwactwa
 
@@ -72,7 +62,7 @@ Chociaż w globalnym zasięgu, to nie dostępne dopiero po `deviceready` imprezi
 
 ### Stałe
 
-Poniższe stałe są zgłaszane jako parametr tylko do wywołania zwrotnego `mediaStatus`:
+Poniższe stałe są zgłaszane jako parametr tylko do `mediaStatus` wywołania zwrotnego:
 
 *   `Media.MEDIA_NONE`= 0;
 *   `Media.MEDIA_STARTING`= 1;
@@ -112,7 +102,7 @@ Poniższe stałe są zgłaszane jako parametr tylko do wywołania zwrotnego `med
 
 ## media.getCurrentPosition
 
-Zwraca bieżącą pozycję w pliku audio. Również aktualizacje obiektu `Media` `Position` parametr.
+Zwraca bieżącą pozycję w pliku audio. Również aktualizacje `Media` obiektu `position` parametr.
 
     media.getCurrentPosition(mediaSuccess, [mediaError]);
     
@@ -255,7 +245,7 @@ Rozpoczyna się lub wznawia odtwarzanie pliku audio.
 
 ## media.release
 
-Zwalnia zasoby audio system operacyjny. Jest to szczególnie ważne dla systemu Android, ponieważ istnieje skończona ilość podstawie OpenCore wystąpień do odtwarzania multimediów. Aplikacje powinny wywoływać funkcję `wydania` dla wszelkich zasobów `mediów`, że nie jest już potrzebna.
+Zwalnia zasoby audio system operacyjny. Jest to szczególnie ważne dla systemu Android, ponieważ istnieje skończona ilość podstawie OpenCore wystąpień do odtwarzania multimediów. Aplikacje powinny wywoływać `release` funkcja dla każdego `Media` zasób, który nie jest już potrzebna.
 
     media.release();
     
@@ -357,7 +347,7 @@ Rozpoczyna nagrywanie pliku audio.
 *   Android
 *   iOS
 *   Windows Phone 7 i 8
-*   Windows
+*   Windows 8
 
 ### Szybki przykład
 
@@ -384,7 +374,6 @@ Rozpoczyna nagrywanie pliku audio.
 ### Dziwactwa Androida
 
 *   Urządzenia z systemem Android nagrywanie dźwięku w formacie Adaptive Multi-Rate. Określony plik powinien kończyć się rozszerzeniem *AMR* .
-*   Głośności sprzętu są okablowane do wielkości nośnika, a wszelkie obiekty multimedialne są żywe. Po raz ostatni Media utworzony obiekt ma `release()` wezwał go, głośności przywrócić ich domyślne zachowanie. Kontrole są również reset nawigacji strony, jak to wszystkie obiekty multimedialne.
 
 ### Dziwactwa iOS
 
@@ -397,7 +386,7 @@ Rozpoczyna nagrywanie pliku audio.
         var myMedia = new Media("documents://beer.mp3")
         
 
-### Windows dziwactwa
+### Windows 8 dziwactwa
 
 *   Jeśli nie podano pełną ścieżkę, nagrywanie jest umieszczony w katalogu AppData/temp. To mogą być dostępne za pośrednictwem `Plik` Za pomocą interfejsu API `LocalFileSystem.TEMPORARY` lub "ms-appdata: temp / / / /<filename>"URI.
 
@@ -411,7 +400,7 @@ Rozpoczyna nagrywanie pliku audio.
 
 Zatrzymuje odtwarzanie pliku audio.
 
-    media.stop();
+    Media.stop();
     
 
 ### Szybki przykład
@@ -453,7 +442,7 @@ Zatrzymuje nagrywanie pliku audio.
 *   Android
 *   iOS
 *   Windows Phone 7 i 8
-*   Windows
+*   Windows 8
 
 ### Szybki przykład
 
@@ -489,7 +478,7 @@ Zatrzymuje nagrywanie pliku audio.
 
 ## MediaError
 
-Gdy wystąpi błąd, funkcja wywołania zwrotnego `mediaError` zwracany jest obiekt `MediaError`.
+A `MediaError` obiekt jest zwracany do `mediaError` funkcji wywołania zwrotnego, gdy wystąpi błąd.
 
 ### Właściwości
 
