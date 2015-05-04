@@ -107,6 +107,8 @@ The following constants are reported as the only parameter to the
 
 - `media.stop`: Stop playing an audio file.
 
+- `media.repeat`: Start or stop repeating an audio file.
+
 ### Additional ReadOnly Parameters
 
 - __position__: The position within the audio playback, in seconds.
@@ -446,6 +448,47 @@ Stops playing an audio file.
         setTimeout(function() {
             my_media.stop();
         }, 10000);
+    }
+	
+## media.repeat
+
+Start or stop repeating an audio file.
+
+    media.setVolume(isOnRepeat);
+
+### Parameters
+
+- __isOnRepeat__: The boolean to determine whether audio should be played repeatedly.
+
+### Supported Platforms
+
+- Android
+
+### Quick Example
+
+    // Play audio
+    //
+    function playAudio(url) {
+        // Play the audio file at url
+        var my_media = new Media(url,
+            // success callback
+            function() {
+                console.log("playAudio():Audio Success");
+            },
+            // error callback
+            function(err) {
+                console.log("playAudio():Audio Error: "+err);
+        });
+
+        // Play audio
+        my_media.play();
+		// repeatedly
+        my_media.repeat(true);
+
+        // turn off repeat after 5 seconds
+        setTimeout(function() {
+            my_media.repeat(false);
+        }, 5000);
     }
 
 

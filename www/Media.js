@@ -77,6 +77,13 @@ Media.prototype.play = function(options) {
 };
 
 /**
+ * Start or stop repeating an audio file.
+ */
+Media.prototype.repeat = function(isOnRepeat) {
+    exec(null, null, "Media", "playAudioOnRepeat", [this.id, isOnRepeat]);
+};
+
+/**
  * Stop playing audio file.
  */
 Media.prototype.stop = function() {

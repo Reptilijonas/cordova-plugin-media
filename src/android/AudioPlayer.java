@@ -86,6 +86,8 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
     private MediaPlayer player = null;      // Audio player object
     private boolean prepareOnly = true;     // playback after file prepare flag
     private int seekOnPrepared = 0;     // seek to this location once media is prepared
+    
+    private boolean isOnRepeat = false;		// check if media is played on repeat
 
     /**
      * Constructor.
@@ -97,8 +99,9 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
         this.handler = handler;
         this.id = id;
         this.audioFile = file;
-        this.recorder = new MediaRecorder();
-
+        //[CB-8020] DISABLED: do not create recorder on instance initialization, by lazily in startRecording()
+        //this.recorder = new MediaRecorder();
+        
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             this.tempFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmprecording.3gp";
         } else {
@@ -140,6 +143,10 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
             break;
         case NONE:
             this.audioFile = file;
+            //[CB-8020] create recorder lazily, if it does not already exist:
+            if(this.recorder == null){
+            	this.recorder = new MediaRecorder();
+            }
             this.recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             this.recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT); // THREE_GPP);
             this.recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT); //AMR_NB);
@@ -222,6 +229,10 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
             this.prepareOnly = false;
         }
     }
+    
+    public void playAudioOnRepeat(boolean isOnRepeat) {
+    	this.isOnRepeat = isOnRepeat;
+    }
 
     /**
      * Seek or jump to a new time in the track.
@@ -261,6 +272,8 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
             this.player.pause();
             this.player.seekTo(0);
             Log.d(LOG_TAG, "stopPlaying is calling stopped");
+            //MINE!!!!!!!!!!!!!!!!!!!!!
+            this.isOnRepeat = false;
             this.setState(STATE.MEDIA_STOPPED);
         }
         else {
@@ -275,8 +288,13 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
      * @param player           The MediaPlayer that reached the end of the file
      */
     public void onCompletion(MediaPlayer player) {
-        Log.d(LOG_TAG, "on completion is calling stopped");
-        this.setState(STATE.MEDIA_STOPPED);
+    	if (this.isOnRepeat) {
+    		startPlaying(this.audioFile);
+    	}
+    	else {
+            Log.d(LOG_TAG, "on completion is calling stopped");
+            this.setState(STATE.MEDIA_STOPPED);
+    	}
     }
 
     /**
@@ -418,7 +436,7 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
     private void setMode(MODE mode) {
         if (this.mode != mode) {
             //mode is not part of the expected behavior, so no notification
-            //this.handler.webView.sendJavascript("cordova.require('cordova-plugin-media.Media').onStatus('" + this.id + "', " + MEDIA_STATE + ", " + mode + ");");
+            //this.handler.webView.sendJavascript("cordova.require('org.apache.cordova.media.Media').onStatus('" + this.id + "', " + MEDIA_STATE + ", " + mode + ");");
         }
         this.mode = mode;
     }

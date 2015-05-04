@@ -114,7 +114,16 @@ public class AudioHandler extends CordovaPlugin {
            } catch (NumberFormatException nfe) {
                //no-op
            }
-        } else if (action.equals("getCurrentPositionAudio")) {
+        }
+        else if (action.equals("playAudioOnRepeat")) {
+        	try {
+        		this.playAudioOnRepeat(args.getString(0), Boolean.parseBoolean(args.getString(1)));
+        	} catch (Exception e) {
+        		// don't do anything
+        	}
+        	return true;
+        }
+        else if (action.equals("getCurrentPositionAudio")) {
             float f = this.getCurrentPositionAudio(args.getString(0));
             callbackContext.sendPluginResult(new PluginResult(status, f));
             return true;
@@ -375,6 +384,15 @@ public class AudioHandler extends CordovaPlugin {
             audio.setVolume(volume);
         } else {
             System.out.println("AudioHandler.setVolume() Error: Unknown Audio Player " + id);
+        }
+    }
+    
+    public void playAudioOnRepeat(String id, boolean isOnRepeat) {
+    	AudioPlayer audio = this.players.get(id);
+        if (audio != null) {
+            audio.playAudioOnRepeat(isOnRepeat);
+        } else {
+            System.out.println("AudioHandler.playAudioOnRepeat() Error: Unknown Audio Player " + id);
         }
     }
 
